@@ -1,4 +1,4 @@
-!# CarND-Controls-MPC
+# CarND-Model Predictive Control 
 
 ## Aim 
 
