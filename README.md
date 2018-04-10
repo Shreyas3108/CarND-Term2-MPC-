@@ -1,4 +1,4 @@
-# CarND-Controls-MPC
+!# CarND-Controls-MPC
 
 ## Aim 
 
@@ -42,7 +42,7 @@ The state vectors used in the model looks like this ,
 The values chosen were 10 and 0.1 which were basically the way how it was discussed on the Q&A video. I did try changing the value of N from 10 to 15 but the results were weird and the car basically became a flying car. 
 But in car's defence while trying that out the cost functions weren't appropriate and the value of velocity was way too high. 
 
-[Fly , let your dream come true](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/flying_car.jpg) 
+![Fly , let your dream come true](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/flying_car.jpg) 
 
 ( I had to capture that on my phone as it was an unbelievable moment) 
 
