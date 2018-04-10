@@ -1,5 +1,94 @@
 # CarND-Controls-MPC
-Self-Driving Car Engineer Nanodegree Program
+
+## Aim 
+
+Creating a Model predictive control to navigate the car through the lap of the simulator. 
+
+![Aim](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/Screenshot%20(606).png)
+
+## Model 
+
+The model used is a Kinematic model , Kinematic model eradicates the real forces such as friction generated due to interaction between 
+tires and the road , gravity and also other aspects such as the mass of the car. The other model is the Dynamic model which basically uses all the forces pertaining to the car and off the car. The project aims at Kinematic model and Dynamic model hasn't been implemented here though there were specific tries by setting friction value as 0.1 but wasn't successful. 
+
+The kinematic condition for vehicle state are as follows :- 
+1. Position at X-axis 
+2. Position at Y-axis 
+3. Direction 
+4. Velocity 
+
+With this and the help of two other parameters which are actuators , which helps in movement of the car. :- 
+1. Steering angle 
+2. Acceleration and Deacceleration 
+
+We try to reduce the error which results in our car following the path , Much intuitively the car must follow the path and drive on the 
+road this can be achieved by the help of reducing the cost of two error and as the iteration goes on the main aim becomes to reduce the error in order for the car to drive. The errors are as follows :- 
+1. CTE :- Cross track error 
+2. EPSI :- Error in direction. 
+
+So here's how the model looks like :- 
+
+![Model](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/Screenshot%20(608).png) 
+
+
+The state vectors used in the model looks like this , 
+
+![State Vectors](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/Screenshot%20(609).png) 
+
+## Implementation 
+
+### Timestep and Delay (N and dt) 
+
+The values chosen were 10 and 0.1 which were basically the way how it was discussed on the Q&A video. I did try changing the value of N from 10 to 15 but the results were weird and the car basically became a flying car. 
+But in car's defence while trying that out the cost functions weren't appropriate and the value of velocity was way too high. 
+
+[Fly , let your dream come true](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/flying_car.jpg) 
+
+( I had to capture that on my phone as it was an unbelievable moment) 
+
+### Polynomial Fitting 
+
+The polynomials are fit by the help of `polyfit` function which is present in the starter code given by Udacity. I tried using pointers as discussed in the Q&A video but for some reasons it failed
+
+
+![with pointer](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/polynomialfit1.jpg) 
+
+Hence , i went ahead with Eigen vectors with the size of `ptsx` and ran it through a loop which was then used to plot the points by the third degree polynomial. Can be found here , 
+
+https://github.com/Shreyas3108/CarND-Term2-MPC-/blob/a5c63d216255cf2c5878e9834c32cfd5428886f5/src/main.cpp#L115
+
+The coefficents as seen from the code are used to computer the cte and epsi. 
+
+### MPC Latency 
+
+The latency section is where i changed the value from 100ms to 200ms and then back to 100ms to check how the model works , but it needed change in the cost function
+Which can be found on (Latency)  
+https://github.com/Shreyas3108/CarND-Term2-MPC-/blob/a5c63d216255cf2c5878e9834c32cfd5428886f5/src/main.cpp#L203 
+
+Since Udacity has asked to submit the project with delay latency set as 100.0 , I have let that be. 
+
+By using the model and delay interval rates i was able to compute the state values which was then used as state instead of the original values Without latency our car will be moving and accelerating based on the model and would actually respond slowly and bit late (Like Kevin from The Office) and would eventually move in haphazard manner and ultimately go for a swim. 
+
+### Minimizing the cost parameters 
+
+I chose trial and error method , I took help on this part from fellow students , forums as well as Slack. 
+
+here are few results of the CTE and EPSI tuning. 
+The results are as follows 
+
+**2000** 
+
+![2000.png](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/2000.png) 
+
+**1500** 
+![1500.png](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/1500.png)
+
+And finally settling for **1100** 
+![1100.png](https://raw.githubusercontent.com/Shreyas3108/CarND-Term2-MPC-/master/image/1100.png) 
+
+### Hardware used 
+
+The car seems to run perfect on my laptop running on Windows 10 with NVIDIA 940MX GPU and 8GB RAM.  
 
 ---
 
@@ -105,4 +194,10 @@ One last note here: regardless of the IDE used, every submitted project must
 still be compilable with cmake and make./
 
 ## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777). 
+
+## Reference 
+
+1. The forums from the SDC 
+2. Slack 
+3. https://www.youtube.com/watch?v=bOQuhpz3YfU&feature=youtu.be Q&A for the same project. 
